@@ -1,0 +1,49 @@
+﻿@page "/fetchanimequote"
+@inject HttpClient Http
+@using System.Text.Json
+<div class="text-center">
+<h1 class="display-1">Get a random anime quote!</h1>
+</div>
+
+<div class="text-center">
+<button @onclick="GetAnimeQuote" class="btn btn-primary align-content-center">Get a new random anime quote</button>
+</div>
+
+<div class="pt-4 text-center">
+@if (animeQuote == null)
+{
+    <p> Fetching anime quote..</p>
+
+}
+else
+{
+    <p>Anime: @animeQuote.anime</p>
+    <p>Quote: @animeQuote.quote</p>
+}
+</div>
+@code {
+    private AnimeQuote[]? animeQuotes;
+    private AnimeQuote animeQuote;
+
+    private class AnimeQuote
+    {
+        public string anime { get; set; }
+        public string character { get; set; }
+        public string quote { get; set; }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        animeQuote = await Http.GetFromJsonAsync<AnimeQuote>("https://animechan.vercel.app/api/random");
+
+    }
+
+    private async Task GetAnimeQuote()
+    {
+        animeQuote = await Http.GetFromJsonAsync<AnimeQuote>("https://animechan.vercel.app/api/random");
+        
+    }
+
+
+
+}
